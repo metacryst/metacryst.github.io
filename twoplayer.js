@@ -16,7 +16,7 @@ let correctlyGuessedLetters = [];
 let numberGuesses = 0;
 
 // add event listeners
-playButton.addEventListener('click', playGame);
+playButton.addEventListener('click', checkWord);
 inputBox.addEventListener('keyup', function (event) {
     event.preventDefault();
     if (event.keyCode === 13) {
@@ -24,9 +24,26 @@ inputBox.addEventListener('keyup', function (event) {
     }
 });
 
+function checkWord() {
+    const wordInput = document.querySelector('.word-input').value.toLowerCase();
+    console.log(wordInput);
+    
+// fetch the right API
+    fetch(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${wordInput}?key=6042af0f-dbfe-4420-8b9a-03966c7bf2f7`)
+       .then((response) => response.json())
+       .then((response) => {
+            if(typeof response[0] === 'string') {
+                heading.innerText = `hey! ${wordInput} ain\'t a word!`
+            } else {
+                playGame();
+            }
+        });
+}
+
 
 // set game up
 function playGame() {
+
     const wordInput = document.querySelector('.word-input').value.toLowerCase();
     const wordLetters = [];
     console.log(wordInput);
